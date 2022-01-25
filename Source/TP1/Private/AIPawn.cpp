@@ -51,7 +51,7 @@ void AAIPawn::Tick(float DeltaTime)
 	GEngine->AddOnScreenDebugMessage(1, 0.1f, FColor::Green, FString::Printf(TEXT("NewSide : %f - %f - %f"), NewSide.X, NewSide.Y, NewSide.Z));
 	GEngine->AddOnScreenDebugMessage(1, 0.1f, FColor::Blue, FString::Printf(TEXT("NewUp : %f - %f - %f"), NewUp.X, NewUp.Y, NewUp.Z));
 
-	this->SetActorLocation(FVector(NewForward.X , NewSide.Y, NewUp.Z));
+	this->SetActorLocation(Position + FVector(NewForward.X , NewSide.Y, NewUp.Z));
 }
 
 // Called to bind functionality to input
