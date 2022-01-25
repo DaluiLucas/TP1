@@ -22,7 +22,7 @@ SeekMovement::~SeekMovement()
 FVector SeekMovement::Seek()
 {
 	FVector DesiredVelocity = TargetPos - AiPos;
-	DesiredVelocity.Normalize();
+	if( !DesiredVelocity.IsNormalized()) DesiredVelocity.Normalize();
 	DesiredVelocity *= MaxSpeed;
 	return DesiredVelocity - Velocity;
 }

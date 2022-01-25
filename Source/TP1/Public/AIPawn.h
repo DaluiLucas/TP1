@@ -19,6 +19,15 @@ protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 	
+	// class Vehicule
+	UPROPERTY(Editinstanceonly, BlueprintReadOnly, Category = Limiter, meta = (AllowPrivateAccess = "true"))
+	float Mass = 10.f;
+
+	UPROPERTY(editinstanceonly, BlueprintReadOnly, Category = Limiter, meta = (AllowPrivateAccess = "true"))
+	float MaxSpeed = 800.f;
+
+	UPROPERTY(editinstanceonly, BlueprintReadOnly, Category = Limiter, meta = (AllowPrivateAccess = "true"))
+	float MaxForce = 12.f;
 
 public:	
 	// Called every frame

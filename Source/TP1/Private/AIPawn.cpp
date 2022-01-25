@@ -5,6 +5,9 @@
 
 #include "SeekMovement.h"
 
+
+#include "SeekMovement.h"
+
 // Sets default values
 AAIPawn::AAIPawn()
 {
@@ -28,8 +31,27 @@ void AAIPawn::BeginPlay()
 // Called every frame
 void AAIPawn::Tick(float DeltaTime)
 {
-	Super::Tick(DeltaTime);
 
+	Super::Tick(DeltaTime);
+	SeekMovement SeekM = SeekMovement(Cast<APawn>(this), FVector(5.f, 5.f, 5.f), MaxSpeed);
+	FVector SteeringForce = SeekM.Seek().GetClampedToMaxSize(MaxForce);
+	FVector Acceleration = SteeringForce / Mass;
+	FVector Velocity = (GetVelocity() + Acceleration).GetClampedToMaxSize(MaxSpeed);
+	FVector Position = GetActorLocation()+Velocity;
+
+	//
+	Velocity.Normalize();
+	FVector NewForward = Velocity;
+	FVector ApproximateUp = GetActorUpVector();
+	ApproximateUp.Normalize();
+	FVector NewSide = FVector::CrossProduct(NewForward, ApproximateUp);
+	FVector NewUp = FVector::CrossProduct(NewForward, NewSide);
+
+	GEngine->AddOnScreenDebugMessage(1, 0.1f, FColor::Red, FString::Printf(TEXT("VectorForw : %f - %f - %f"), NewForward.X, NewForward.Y, NewForward.Z));
+	GEngine->AddOnScreenDebugMessage(1, 0.1f, FColor::Green, FString::Printf(TEXT("NewSide : %f - %f - %f"), NewSide.X, NewSide.Y, NewSide.Z));
+	GEngine->AddOnScreenDebugMessage(1, 0.1f, FColor::Blue, FString::Printf(TEXT("NewUp : %f - %f - %f"), NewUp.X, NewUp.Y, NewUp.Z));
+
+	this->SetActorLocation(FVector(NewForward.X , NewSide.Y, NewUp.Z));
 }
 
 // Called to bind functionality to input
