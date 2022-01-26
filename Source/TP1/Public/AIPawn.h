@@ -29,12 +29,16 @@ protected:
 	UPROPERTY(editinstanceonly, BlueprintReadOnly, Category = Limiter, meta = (AllowPrivateAccess = "true"))
 	float MaxForce = 12.f;
 
+	FVector Velocity = FVector(-1000.0f,-500,0.0f);
+
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
+
+	FVector Truncate(FVector Vec, float Max);
 
 private:
 	UPROPERTY(VisibleAnywhere, Category = ArcanoidePawn, meta = (AllowPrivateAccess = "true"))

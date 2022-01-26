@@ -5,13 +5,12 @@
 
 #include "AIPawn.h"
 
-SeekMovement::SeekMovement(APawn* AiPawn, FVector TargetPos, float MaxSpeed=500.0f)
+SeekMovement::SeekMovement(APawn* AiPawn, FVector TargetPos, float MaxSpeed, FVector Vel)
 {
 	AiPos = AiPawn->GetActorLocation();
-	Velocity = AiPawn->GetVelocity();
-	TargetPos = TargetPos;
-	TargetPos = TargetPos;
-	MaxSpeed = MaxSpeed;
+	Velocity= Vel;
+	this->TargetPos = TargetPos;
+	this->MaxSpeed = MaxSpeed;
 }
 
 SeekMovement::~SeekMovement()
@@ -21,10 +20,7 @@ SeekMovement::~SeekMovement()
 
 FVector SeekMovement::Seek()
 {
-	FVector DesiredVelocity = TargetPos - AiPos;
-	if( !DesiredVelocity.IsNormalized()) DesiredVelocity.Normalize();
-	DesiredVelocity *= MaxSpeed;
+	FVector DesiredVelocity = (TargetPos - AiPos).GetUnsafeNormal() * MaxSpeed;
 	return DesiredVelocity - Velocity;
 }
-
 //normalize(v) = to_unit(v) = v/|v|

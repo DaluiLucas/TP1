@@ -10,7 +10,7 @@
 class TP1_API SeekMovement
 {
 public:
-	SeekMovement(APawn* AiPawn, FVector TargetPos, float MaxSpeed);
+	SeekMovement(APawn* AiPawn, FVector TargetPos, float MaxSpeed, FVector Vel);
 	FVector Seek();
 	~SeekMovement();
 
