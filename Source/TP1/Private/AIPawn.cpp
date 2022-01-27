@@ -5,6 +5,7 @@
 
 #include "SeekMovement.h"
 #include "FleeMovement.h"
+#include "PursuitMovement.h"
 
 #include "SeekMovement.h"
 
@@ -35,10 +36,15 @@ void AAIPawn::Tick(float DeltaTime)
 {
 
 	Super::Tick(DeltaTime);
-	FleeMovement FleeM = FleeMovement(Cast<APawn>(this), FVector(5.f, 5.f, 5.f), MaxSpeed, Velocity);
+	//FleeMovement FleeM = FleeMovement(Cast<APawn>(this), FVector(5.f, 5.f, 5.f), MaxSpeed, Velocity);
+	//FVector SteeringForce = Truncate(FleeM.Flee(), MaxForce);
+
 	//SeekMovement SeekM = SeekMovement(Cast<APawn>(this), FVector(5.f,5.f,5.f), MaxSpeed, Velocity);
 	//FVector SteeringForce = Truncate(SeekM.Seek(), MaxForce);
-	FVector SteeringForce = Truncate(FleeM.Flee(), MaxForce);
+
+	PursuitMovement PursuitM = PursuitMovement(Cast<APawn>(this), FVector(5.f,5.f,5.f), MaxSpeed, Velocity);
+	FVector SteeringForce = Truncate(PursuitM.Pursuit(), MaxForce);
+
 	FVector Acceleration = SteeringForce / Mass;
 	Velocity = Truncate(Velocity + Acceleration, MaxSpeed);
 	FVector Position = GetActorLocation()+Velocity;
@@ -49,7 +55,7 @@ void AAIPawn::Tick(float DeltaTime)
 	FVector NewSide = FVector::CrossProduct(NewForward, ApproximateUp);
 	FVector NewUp = FVector::CrossProduct(NewForward, NewSide);
 
-	SetActorLocation(FVector(Position.X , Position .Y , 0.f));
+	SetActorLocation(FVector(Position.X,Position.Y , 0.0f));
 	SetActorRotation(FRotator(NewForward.X, NewSide.Y,NewUp.Z));
 }
 

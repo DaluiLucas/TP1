@@ -38,6 +38,7 @@ public:
 
 	FVector Truncate(FVector Vect, float maxS);
 private:
+
 	UPROPERTY(VisibleAnywhere, Category = ArcanoidePawn, meta = (AllowPrivateAccess = "true"))
 	class USceneComponent* RootScene;
 

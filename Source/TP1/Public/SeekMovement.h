@@ -14,7 +14,7 @@ public:
 	FVector Seek();
 	~SeekMovement();
 
-private:
+protected:
 	FVector TargetPos;
 	FVector AiPos;
 	float MaxSpeed;
