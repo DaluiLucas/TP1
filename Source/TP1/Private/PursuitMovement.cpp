@@ -18,3 +18,8 @@ FVector PursuitMovement::Pursuit() {
 	TargetPos = TargetPos - T;
 	return Seek();
 }
+
+FVector PursuitMovement::SteeringForce()
+{
+	return Pursuit();
+}

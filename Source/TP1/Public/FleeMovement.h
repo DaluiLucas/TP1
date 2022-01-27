@@ -2,20 +2,19 @@
 
 #pragma once
 
+#include "SteeringMovement.h"
+
 #include "CoreMinimal.h"
 
 /**
  * 
  */
-class TP1_API FleeMovement
+class TP1_API FleeMovement : public SteeringMovement
 {
 public:
 	FleeMovement(APawn* AiPawn, FVector TargetPos, float MaxSpeed, FVector Velo);
 	~FleeMovement();
 	FVector Flee();
-private:
-	FVector TargetPos;
-	FVector AiPos;
-	float MaxSpeed;
-	FVector Velocity;
+
+	virtual FVector SteeringForce() override;
 };

@@ -6,6 +6,7 @@
 #include "SeekMovement.h"
 #include "FleeMovement.h"
 #include "PursuitMovement.h"
+#include "SteeringMovement.h"
 
 #include "SeekMovement.h"
 
@@ -42,8 +43,19 @@ void AAIPawn::Tick(float DeltaTime)
 	//SeekMovement SeekM = SeekMovement(Cast<APawn>(this), FVector(5.f,5.f,5.f), MaxSpeed, Velocity);
 	//FVector SteeringForce = Truncate(SeekM.Seek(), MaxForce);
 
-	PursuitMovement PursuitM = PursuitMovement(Cast<APawn>(this), FVector(5.f,5.f,5.f), MaxSpeed, Velocity);
-	FVector SteeringForce = Truncate(PursuitM.Pursuit(), MaxForce);
+	//PursuitMovement PursuitM = PursuitMovement(Cast<APawn>(this), FVector(5.f,5.f,5.f), MaxSpeed, Velocity);
+	//FVector SteeringForce = Truncate(PursuitM.Pursuit(), MaxForce);
+	FVector SteeringForce;
+	if (MovementType == 0) {
+		SteeringForce = Truncate(FleeMovement(Cast<APawn>(this), FVector(5.f, 5.f, 5.f), MaxSpeed, Velocity).SteeringForce(), MaxForce);
+	}
+	if (MovementType == 1) {
+		SteeringForce = Truncate(SeekMovement(Cast<APawn>(this), FVector(5.f, 5.f, 5.f), MaxSpeed, Velocity).SteeringForce(), MaxForce);
+	}
+	if (MovementType == 2) {
+		SteeringForce = Truncate(PursuitMovement(Cast<APawn>(this), FVector(5.f, 5.f, 5.f), MaxSpeed, Velocity).SteeringForce(), MaxForce);
+	}
+
 
 	FVector Acceleration = SteeringForce / Mass;
 	Velocity = Truncate(Velocity + Acceleration, MaxSpeed);
@@ -56,7 +68,7 @@ void AAIPawn::Tick(float DeltaTime)
 	FVector NewUp = FVector::CrossProduct(NewForward, NewSide);
 
 	SetActorLocation(FVector(Position.X,Position.Y , 0.0f));
-	SetActorRotation(FRotator(NewForward.X, NewSide.Y,NewUp.Z));
+	SetActorRotation(FRotator(Velocity.Rotation()));
 }
 
 // Called to bind functionality to input

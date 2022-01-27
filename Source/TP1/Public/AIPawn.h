@@ -15,6 +15,7 @@ public:
 	// Sets default values for this pawn's properties
 	AAIPawn();
 
+
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
@@ -28,6 +29,9 @@ protected:
 
 	UPROPERTY(editinstanceonly, BlueprintReadOnly, Category = Limiter, meta = (AllowPrivateAccess = "true"))
 	float MaxForce = 12.f;
+
+	UPROPERTY(editinstanceonly, BlueprintReadOnly, Category = Limiter, meta = (AllowPrivateAccess = "true" , ClampMin = "0", ClampMax = "3", UIMin = "0", UIMax = "3"))
+	int MovementType = 0;
 
 public:	
 	// Called every frame
@@ -49,4 +53,6 @@ private:
 	class UStaticMeshComponent* MeshComp;
 
 	FVector Velocity;
+
+
 };

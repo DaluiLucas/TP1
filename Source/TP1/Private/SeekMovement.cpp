@@ -5,13 +5,8 @@
 
 #include "AIPawn.h"
 
-SeekMovement::SeekMovement(APawn* AiPawn, FVector TargetPos, float MaxSpeed , FVector Velo)
+SeekMovement::SeekMovement(APawn* AiPawn, FVector TargetPos, float MaxSpeed , FVector Velo) : SteeringMovement(AiPawn, TargetPos, MaxSpeed, Velo)
 {
-	AiPos = AiPawn->GetActorLocation();
-	Velocity = Velo;
-	this->TargetPos = TargetPos;
-	this->TargetPos = TargetPos;
-	this->MaxSpeed = MaxSpeed;
 }
 
 SeekMovement::~SeekMovement()
@@ -19,10 +14,16 @@ SeekMovement::~SeekMovement()
 
 }
 
+
+
 FVector SeekMovement::Seek()
 {
 	FVector DesiredVelocity = (TargetPos - AiPos).GetUnsafeNormal() * MaxSpeed;
 	return DesiredVelocity - Velocity;
 }
 
+FVector SeekMovement::SteeringForce()
+{
+	return Seek();
+}
 //normalize(v) = to_unit(v) = v/|v|

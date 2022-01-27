@@ -15,6 +15,7 @@ public:
 	PursuitMovement(APawn* AiPawn, FVector TargetPos, float MaxSpeed, FVector Velo);
 	~PursuitMovement();
 	FVector Pursuit();
+	virtual FVector SteeringForce() override;
 
 protected:
 	UPROPERTY(Editinstanceonly, BlueprintReadOnly, Category = Limiter, meta = (AllowPrivateAccess = "true"))

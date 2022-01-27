@@ -2,22 +2,19 @@
 
 #pragma once
 
+#include "SteeringMovement.h"
+
 #include "CoreMinimal.h"
 
 /**
  * 
  */
-class TP1_API SeekMovement
+class TP1_API SeekMovement : public SteeringMovement
 {
 public:
 	SeekMovement(APawn* AiPawn, FVector TargetPos, float MaxSpeed, FVector Velo);
 	FVector Seek();
 	~SeekMovement();
-
-protected:
-	FVector TargetPos;
-	FVector AiPos;
-	float MaxSpeed;
-	FVector Velocity;
+	virtual FVector SteeringForce() override;
 
 };
