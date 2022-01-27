@@ -7,17 +7,15 @@
 /**
  * 
  */
-class TP1_API SeekMovement
+class TP1_API FleeMovement
 {
 public:
-	SeekMovement(APawn* AiPawn, FVector TargetPos, float MaxSpeed, FVector Velo);
-	FVector Seek();
-	~SeekMovement();
-
+	FleeMovement(APawn* AiPawn, FVector TargetPos, float MaxSpeed, FVector Velo);
+	~FleeMovement();
+	FVector Flee();
 private:
 	FVector TargetPos;
 	FVector AiPos;
 	float MaxSpeed;
 	FVector Velocity;
-
 };

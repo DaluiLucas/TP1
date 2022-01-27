@@ -36,6 +36,7 @@ public:
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
+	FVector Truncate(FVector Vect, float maxS);
 private:
 	UPROPERTY(VisibleAnywhere, Category = ArcanoidePawn, meta = (AllowPrivateAccess = "true"))
 	class USceneComponent* RootScene;
@@ -45,4 +46,6 @@ private:
 
 	UPROPERTY(VisibleAnywhere, Category = ArcanoidePawn, meta = (AllowPrivateAccess = "true"))
 	class UStaticMeshComponent* MeshComp;
+
+	FVector Velocity;
 };
