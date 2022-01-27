@@ -33,6 +33,9 @@ protected:
 	UPROPERTY(editinstanceonly, BlueprintReadOnly, Category = Limiter, meta = (AllowPrivateAccess = "true" , ClampMin = "0", ClampMax = "3", UIMin = "0", UIMax = "3"))
 	int MovementType = 0;
 
+	UPROPERTY(EditInstanceOnly, Category = "Target")
+	APawn* Target;
+
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;

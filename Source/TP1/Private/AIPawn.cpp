@@ -37,24 +37,21 @@ void AAIPawn::Tick(float DeltaTime)
 {
 
 	Super::Tick(DeltaTime);
-	//FleeMovement FleeM = FleeMovement(Cast<APawn>(this), FVector(5.f, 5.f, 5.f), MaxSpeed, Velocity);
-	//FVector SteeringForce = Truncate(FleeM.Flee(), MaxForce);
 
-	//SeekMovement SeekM = SeekMovement(Cast<APawn>(this), FVector(5.f,5.f,5.f), MaxSpeed, Velocity);
-	//FVector SteeringForce = Truncate(SeekM.Seek(), MaxForce);
 
-	//PursuitMovement PursuitM = PursuitMovement(Cast<APawn>(this), FVector(5.f,5.f,5.f), MaxSpeed, Velocity);
-	//FVector SteeringForce = Truncate(PursuitM.Pursuit(), MaxForce);
 	FVector SteeringForce;
-	if (MovementType == 0) {
-		SteeringForce = Truncate(FleeMovement(Cast<APawn>(this), FVector(5.f, 5.f, 5.f), MaxSpeed, Velocity).SteeringForce(), MaxForce);
+	if (Target != nullptr) {
+		if (MovementType == 0) {
+			SteeringForce = Truncate(FleeMovement(Cast<APawn>(this), Target->GetActorLocation() , MaxSpeed, Velocity).SteeringForce(), MaxForce);
+		}
+		if (MovementType == 1) {
+			SteeringForce = Truncate(SeekMovement(Cast<APawn>(this), Target->GetActorLocation(), MaxSpeed, Velocity).SteeringForce(), MaxForce);
+		}
+		if (MovementType == 2) {
+			SteeringForce = Truncate(PursuitMovement(Cast<APawn>(this), Target->GetActorLocation(), MaxSpeed, Velocity).SteeringForce(), MaxForce);
+		}
 	}
-	if (MovementType == 1) {
-		SteeringForce = Truncate(SeekMovement(Cast<APawn>(this), FVector(5.f, 5.f, 5.f), MaxSpeed, Velocity).SteeringForce(), MaxForce);
-	}
-	if (MovementType == 2) {
-		SteeringForce = Truncate(PursuitMovement(Cast<APawn>(this), FVector(5.f, 5.f, 5.f), MaxSpeed, Velocity).SteeringForce(), MaxForce);
-	}
+
 
 
 	FVector Acceleration = SteeringForce / Mass;
