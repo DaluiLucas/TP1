@@ -7,7 +7,10 @@
 #include "FleeMovment.h"
 #include "MovementBase.h"
 #include "PursuitMovement.h"
+#include "ArrivalMovement.h"
 #include "EvasionMovement.h"
+#include "CircuitMovement.h"
+#include "OneWayMovement.h"
 
 // Sets default values
 AAIPawn::AAIPawn()
@@ -21,7 +24,7 @@ AAIPawn::AAIPawn()
 	MeshComp = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Mesh Comp"));
 	MeshComp->SetupAttachment(RootComponent);
 
-	Velocity = FVector(-10.f, -10.f, 0.f);
+	Velocity = FVector(0.f, 0.f, 0.f);
 
 }
 
@@ -49,9 +52,40 @@ void AAIPawn::Tick(float DeltaTime)
 		if (MovementTypeAsInt == 0) SteeringForce = Truncate(SeekMovement(Cast<APawn>(this), Target->GetActorLocation(), MaxSpeed, Velocity).Movement(), MaxForce);
 		if (MovementTypeAsInt == 1) SteeringForce = Truncate(FleeMovment(Cast<APawn>(this), Target->GetActorLocation(), MaxSpeed, Velocity).Movement(), MaxForce);
 		if (MovementTypeAsInt == 2) SteeringForce = Truncate(PursuitMovement(Cast<APawn>(this), Target->GetActorLocation(), MaxSpeed, Velocity).Movement(), MaxForce);
+		if (MovementTypeAsInt == 3) SteeringForce = Truncate(EvasionMovement(Cast<APawn>(this), Target->GetActorLocation(), MaxSpeed, Velocity).Movement(), MaxForce);
+		if (MovementTypeAsInt == 4) SteeringForce = Truncate(ArrivalMovement(Cast<APawn>(this), Target->GetActorLocation(), MaxSpeed, Velocity).Movement(), MaxForce);
+		if (MovementTypeAsInt == 5) {
+			///SteeringForce = Truncate(CircuitMovement(Cast<APawn>(this), Target, MaxSpeed, Velocity, PathArray).Movement(), MaxForce);
+			//WrongPlace ?
+			if ((Target->GetActorLocation() - this->GetActorLocation()).Size() < MaxTargetOffset && PathArray.Num() != 0) {
+				//If close to the target, get go for the next target
+				int WhereinArray = PathArray.Find(Target);
+				if (WhereinArray == PathArray.Num()-1) Target = PathArray[0];
+				else Target = PathArray[WhereinArray + 1];
+			}
+			SteeringForce = Truncate(ArrivalMovement(Cast<APawn>(this), Target->GetActorLocation(), MaxSpeed, Velocity).Movement(), MaxForce);
+		}
+		if (MovementTypeAsInt == 6) {
+			///SteeringForce = Truncate(OneWayMovement(Cast<APawn>(this), Target, MaxSpeed, Velocity, PathArray).Movement(), MaxForce);
 
-		else SteeringForce = Truncate(EvasionMovement(Cast<APawn>(this), Target->GetActorLocation(), MaxSpeed, Velocity).Movement(), MaxForce);
+			if ((Target->GetActorLocation() - this->GetActorLocation()).Size() < MaxTargetOffset && PathArray.Num() != 0) {
+				//If close to the target, get go for the next target
+				int WhereinArray = PathArray.Find(Target);
+				if (WhereinArray != PathArray.Num() - 1) Target = PathArray[WhereinArray + 1];
+			}
+			SteeringForce = Truncate(ArrivalMovement(Cast<APawn>(this), Target->GetActorLocation(), MaxSpeed, Velocity).Movement(), MaxForce);
+		}
 
+		if (MovementTypeAsInt == 7) {
+			if ((Target->GetActorLocation() - this->GetActorLocation()).Size() < MaxTargetOffset && PathArray.Num() != 0) {
+				//If close to the target, get go for the next target
+				//fonctionne pas si plusieur fois le m^me acteur
+				int WhereinArray = PathArray.Find(Target);
+				if (WhereinArray == PathArray.Num() - 1 || WhereinArray == 0) Dir= Dir*-1;
+				Target = PathArray[WhereinArray + Dir];
+			}
+			SteeringForce = Truncate(ArrivalMovement(Cast<APawn>(this), Target->GetActorLocation(), MaxSpeed, Velocity).Movement(), MaxForce);
+		}
 	}
 
 	FVector Acceleration = SteeringForce / Mass;
@@ -66,7 +100,7 @@ void AAIPawn::Tick(float DeltaTime)
 	FVector NewSide = FVector::CrossProduct(NewForward, ApproximateUp);
 	FVector NewUp = FVector::CrossProduct(NewForward, NewSide);
 
-	//SetActorRotation(FRotator(NewForward.X, NewSide.Y, 0.0f));
+	SetActorRotation(FRotator(NewForward.X, NewSide.Y, 0.0f));
 }
 
 // Called to bind functionality to input

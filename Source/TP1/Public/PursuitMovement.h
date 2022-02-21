@@ -17,5 +17,5 @@ public:
 
 protected:
 	UPROPERTY(Editinstanceonly, BlueprintReadOnly, Category = Limiter, meta = (AllowPrivateAccess = "true"))
-	float C = 0.2;
+	float C = 0.3;
 };

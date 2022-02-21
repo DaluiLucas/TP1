@@ -12,7 +12,11 @@ enum class EMovementType : uint8 {
 	FLEE = 1 UMETA(DisplayName = "Flee"),
 	PURSUIT = 2 UMETA(DisplayName = "Pursuit"),
 	EVADE = 3 UMETA(DisplayName = "Evade"),
-	ARRIVAL = 4 UMETA(DisplayName = "Arrival")
+	ARRIVAL = 4 UMETA(DisplayName = "Arrival"),
+	CIRCUIT = 5  UMETA(DisplayName = "Circuit"),
+	ONEWAY = 6  UMETA(DisplayName = "OneWay"),
+	TWOWAYS = 7 UMETA(DisplayName = "TwoWays")
+
 };
 
 UCLASS()
@@ -33,17 +37,18 @@ protected:
 	float Mass = 10.f;
 
 	UPROPERTY(editinstanceonly, BlueprintReadOnly, Category = Limiter, meta = (AllowPrivateAccess = "true"))
-	float MaxSpeed = 50.0f;
+	float MaxSpeed = 20.0f;
 
 	UPROPERTY(editinstanceonly, BlueprintReadOnly, Category = Limiter, meta = (AllowPrivateAccess = "true"))
-	float MaxForce = 12.f;
+	float MaxForce = 5.0f;
 
 	FVector Velocity;
 
 	UPROPERTY(EditInstanceOnly, Category = "Target")
 	AActor* Target;
 
-
+	UPROPERTY(EditInstanceOnly, Category = "Target")
+	TArray<AActor*> PathArray;
 
 public:	
 	// Called every frame
@@ -66,5 +71,8 @@ private:
 
 	UPROPERTY(VisibleAnywhere, Category = ArcanoidePawn, meta = (AllowPrivateAccess = "true"))
 	class UStaticMeshComponent* MeshComp;
+
+	float MaxTargetOffset = 150.0f;
+	int Dir = -1;
 };
 
