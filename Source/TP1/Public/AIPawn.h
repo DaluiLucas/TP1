@@ -6,6 +6,15 @@
 #include "GameFramework/Pawn.h"
 #include "AIPawn.generated.h"
 
+UENUM()
+enum class EMovementType : uint8 {
+	SEEK = 0 UMETA(DisplayName = "Seek"),
+	FLEE = 1 UMETA(DisplayName = "Flee"),
+	PURSUIT = 2 UMETA(DisplayName = "Pursuit"),
+	EVADE = 3 UMETA(DisplayName = "Evade"),
+	ARRIVAL = 4 UMETA(DisplayName = "Arrival")
+};
+
 UCLASS()
 class TP1_API AAIPawn : public APawn
 {
@@ -24,12 +33,17 @@ protected:
 	float Mass = 10.f;
 
 	UPROPERTY(editinstanceonly, BlueprintReadOnly, Category = Limiter, meta = (AllowPrivateAccess = "true"))
-	float MaxSpeed = 800.f;
+	float MaxSpeed = 50.0f;
 
 	UPROPERTY(editinstanceonly, BlueprintReadOnly, Category = Limiter, meta = (AllowPrivateAccess = "true"))
 	float MaxForce = 12.f;
 
-	FVector Velocity = FVector(-1000.0f,-500,0.0f);
+	FVector Velocity;
+
+	UPROPERTY(EditInstanceOnly, Category = "Target")
+	AActor* Target;
+
+
 
 public:	
 	// Called every frame
@@ -39,6 +53,9 @@ public:
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
 	FVector Truncate(FVector Vec, float Max);
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = MovementTypes, meta = (AllowPrivateAccess = "true"))
+	EMovementType MovementType;
 
 private:
 	UPROPERTY(VisibleAnywhere, Category = ArcanoidePawn, meta = (AllowPrivateAccess = "true"))
@@ -50,3 +67,4 @@ private:
 	UPROPERTY(VisibleAnywhere, Category = ArcanoidePawn, meta = (AllowPrivateAccess = "true"))
 	class UStaticMeshComponent* MeshComp;
 };
+

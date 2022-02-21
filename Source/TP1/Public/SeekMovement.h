@@ -3,21 +3,12 @@
 #pragma once
 
 #include "CoreMinimal.h"
-
-/**
- * 
- */
-class TP1_API SeekMovement
+#include <MovementBase.h>
+class TP1_API SeekMovement : public MovementBase
 {
 public:
 	SeekMovement(APawn* AiPawn, FVector TargetPos, float MaxSpeed, FVector Vel);
 	FVector Seek();
 	~SeekMovement();
-
-private:
-	FVector TargetPos;
-	FVector AiPos;
-	float MaxSpeed;
-	FVector Velocity;
-
+	virtual FVector Movement() override;
 };

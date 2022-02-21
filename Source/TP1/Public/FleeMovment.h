@@ -3,20 +3,12 @@
 #pragma once
 
 #include "CoreMinimal.h"
-
-/**
- * 
- */
-class TP1_API FleeMovment
+#include <MovementBase.h>
+class TP1_API FleeMovment : public MovementBase
 {
 public:
 	FleeMovment(APawn* AiPawn, FVector TargetPos, float MaxSpeed, FVector Vel);
 	~FleeMovment();
 	FVector Flee();
-private:
-	FVector TargetPos;
-	FVector AiPos;
-	float MaxSpeed;
-	FVector Velocity;
-
+	virtual FVector Movement() override;
 };

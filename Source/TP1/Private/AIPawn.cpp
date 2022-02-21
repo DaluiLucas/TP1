@@ -5,8 +5,9 @@
 
 #include "SeekMovement.h"
 #include "FleeMovment.h"
-
-#include "SeekMovement.h"
+#include "MovementBase.h"
+#include "PursuitMovement.h"
+#include "EvasionMovement.h"
 
 // Sets default values
 AAIPawn::AAIPawn()
@@ -19,6 +20,8 @@ AAIPawn::AAIPawn()
 
 	MeshComp = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Mesh Comp"));
 	MeshComp->SetupAttachment(RootComponent);
+
+	Velocity = FVector(-10.f, -10.f, 0.f);
 
 }
 
@@ -35,12 +38,22 @@ void AAIPawn::Tick(float DeltaTime)
 
 	Super::Tick(DeltaTime);
 
+	uint8 MovementTypeAsInt = (uint8)MovementType;
 
-	SeekMovement SeekM = SeekMovement(Cast<APawn>(this), FVector(5.f, 5.f, 1.f), MaxSpeed, Velocity);
-	FleeMovment FleeM = FleeMovment(Cast<APawn>(this), FVector(5.f, 5.f, 1.f), MaxSpeed, Velocity);
+	//Ugly
 
-	//FVector SteeringForce = Truncate(SeekM.Seek(), MaxForce);
-	FVector SteeringForce = Truncate(FleeM.Flee(), MaxForce);
+	FVector SteeringForce;
+
+	if (Target != nullptr) {
+
+		if (MovementTypeAsInt == 0) SteeringForce = Truncate(SeekMovement(Cast<APawn>(this), Target->GetActorLocation(), MaxSpeed, Velocity).Movement(), MaxForce);
+		if (MovementTypeAsInt == 1) SteeringForce = Truncate(FleeMovment(Cast<APawn>(this), Target->GetActorLocation(), MaxSpeed, Velocity).Movement(), MaxForce);
+		if (MovementTypeAsInt == 2) SteeringForce = Truncate(PursuitMovement(Cast<APawn>(this), Target->GetActorLocation(), MaxSpeed, Velocity).Movement(), MaxForce);
+
+		else SteeringForce = Truncate(EvasionMovement(Cast<APawn>(this), Target->GetActorLocation(), MaxSpeed, Velocity).Movement(), MaxForce);
+
+	}
+
 	FVector Acceleration = SteeringForce / Mass;
 	Velocity = Truncate( Velocity + Acceleration, MaxSpeed);
 	FVector Position = GetActorLocation()+Velocity;

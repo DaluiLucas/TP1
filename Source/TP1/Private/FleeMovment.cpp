@@ -5,12 +5,9 @@
 
 
 
-FleeMovment::FleeMovment(APawn* AiPawn, FVector TargetPos, float MaxSpeed, FVector Vel)
+FleeMovment::FleeMovment(APawn* AiPawn, FVector TargetPos, float MaxSpeed, FVector Vel) : MovementBase{ AiPawn, TargetPos, MaxSpeed, Vel }
 {
-	AiPos = AiPawn->GetActorLocation();
-	Velocity = Vel;
-	this->TargetPos = TargetPos;
-	this->MaxSpeed = MaxSpeed;
+
 }
 
 FleeMovment::~FleeMovment()
@@ -19,6 +16,11 @@ FleeMovment::~FleeMovment()
 
 FVector FleeMovment::Flee()
 {
-	FVector DesiredVelocity = ((TargetPos - AiPos)*-1).GetUnsafeNormal() * MaxSpeed;
+	FVector DesiredVelocity = ((TargetPosition - AiPosition)*-1).GetUnsafeNormal() * MaxSpeed;
 	return DesiredVelocity - Velocity;
+}
+
+FVector FleeMovment::Movement()
+{
+	return Flee();
 }
