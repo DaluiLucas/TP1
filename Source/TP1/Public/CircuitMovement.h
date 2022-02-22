@@ -5,7 +5,7 @@
 #include "CoreMinimal.h"
 #include "ArrivalMovement.h"
 /**
- * 
+ * This class is not Used
  */
 class TP1_API CircuitMovement : public ArrivalMovement
 {
@@ -16,6 +16,8 @@ public:
 	virtual FVector Movement() override;
 
 private:
+
+	//Target offset before swapping target
 	float MaxTargetOffset = 150.0f;
 
 };

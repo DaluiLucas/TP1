@@ -32,21 +32,26 @@ protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 	
-	// class Vehicule
+	// AI mass
 	UPROPERTY(Editinstanceonly, BlueprintReadOnly, Category = Limiter, meta = (AllowPrivateAccess = "true"))
 	float Mass = 10.f;
 
+	//Max Ai speed
 	UPROPERTY(editinstanceonly, BlueprintReadOnly, Category = Limiter, meta = (AllowPrivateAccess = "true"))
 	float MaxSpeed = 20.0f;
 
+	//Max Ai Force
 	UPROPERTY(editinstanceonly, BlueprintReadOnly, Category = Limiter, meta = (AllowPrivateAccess = "true"))
 	float MaxForce = 5.0f;
 
+	//Velocity (we are not using Unreal Velocity)
 	FVector Velocity;
 
+	//Current Target
 	UPROPERTY(EditInstanceOnly, Category = "Target")
 	AActor* Target;
 
+	//Array of target
 	UPROPERTY(EditInstanceOnly, Category = "Target")
 	TArray<AActor*> PathArray;
 
@@ -72,7 +77,10 @@ private:
 	UPROPERTY(VisibleAnywhere, Category = ArcanoidePawn, meta = (AllowPrivateAccess = "true"))
 	class UStaticMeshComponent* MeshComp;
 
+	//Distance from wich we switch Target
 	float MaxTargetOffset = 150.0f;
+
+	//Used in Two ways 
 	int Dir = -1;
 };
 

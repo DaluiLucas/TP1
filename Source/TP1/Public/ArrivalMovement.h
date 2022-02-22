@@ -16,6 +16,8 @@ public:
 	virtual FVector Movement() override;
 
 private:
+
+	//Distance from wich the AI start to slow down
 	float SlowingDistance = 500;
 
 };

@@ -1,6 +1,3 @@
-# TP1
-
-Developed with Unreal Engine 4
 Lab 01 : REALE Lucas
 
 Launch project :
