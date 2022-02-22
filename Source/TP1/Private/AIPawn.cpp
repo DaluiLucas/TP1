@@ -100,7 +100,7 @@ void AAIPawn::Tick(float DeltaTime)
 	FVector NewSide = FVector::CrossProduct(NewForward, ApproximateUp);
 	FVector NewUp = FVector::CrossProduct(NewForward, NewSide);
 
-	SetActorRotation(FRotator(NewForward.X, NewSide.Y, 0.0f));
+	SetActorRotation(NewForward.Rotation());
 }
 
 // Called to bind functionality to input
