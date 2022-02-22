@@ -35,15 +35,4 @@ Putting the same Actor twice in the Array will cause unwanted behaviour such as 
 Arrival does not instantly stop when reaching the Target, instead slows down a lot and keep moving/turning really slow for a moment
 Other Array issues.
 
-### Movement class hierarchy
-
-MovementBase  
-    FleeMovment  
-        EvasionMovement  
-        ArrivalMovement  
-            CircuitMovement  
-            OneWayMovement  
-            TwoWaysMovement  
-        SeekMovement  
-            PursuitMovement  
 	
