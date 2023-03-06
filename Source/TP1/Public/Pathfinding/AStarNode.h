@@ -5,6 +5,8 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
 #include "Components/CapsuleComponent.h"
+#include "Kismet/KismetSystemLibrary.h"
+
 #include "AStarNode.generated.h"
 
 UCLASS()
@@ -17,8 +19,8 @@ public:
 	AAStarNode();
 
 	// Boolean indicating if the charcter can stand where the node is located  
-	UPROPERTY(VisibleAnywhere, Category = "Infos")
-	bool OnOff = false; 
+	UPROPERTY(BlueprintReadWrite, Category = "Infos")
+	bool OnOff = true; 
 
 protected:
 	// Called when the game starts or when spawned
@@ -27,7 +29,7 @@ protected:
 	UPROPERTY(VisibleAnywhere, Category = "Components")
 	UStaticMeshComponent* MeshComp;
 
-	UPROPERTY(VisibleAnywhere, Category = "Components")
+	UPROPERTY(BlueprintReadWrite, Category = "Components")
 	UCapsuleComponent* Capsule; 
 public:	
 	// Called every frame

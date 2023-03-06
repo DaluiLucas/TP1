@@ -11,13 +11,13 @@ AAStarNode::AAStarNode()
 	//Visual representation in game 
 	MeshComp = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("MeshComp"));
 	MeshComp->SetSimulatePhysics(false);
-	RootComponent = MeshComp;
 
 	Capsule = CreateDefaultSubobject<UCapsuleComponent>(TEXT("CapsuleComponent"));
 	Capsule->SetCapsuleRadius(42);
 	Capsule->SetCapsuleHalfHeight(98);
-
-	Capsule->SetupAttachment(RootComponent);
+	Capsule->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
+	RootComponent = Capsule;
+	MeshComp->SetupAttachment(RootComponent);
 
 }
 
@@ -25,7 +25,16 @@ AAStarNode::AAStarNode()
 void AAStarNode::BeginPlay()
 {
 	Super::BeginPlay();
-	
+	//TArray<UPrimitiveComponent* > OverlappingComponents;
+
+	////UKismetSystemLibrary::ComponentOverlapActors();
+
+	//Capsule->GetOverlappingComponents(OverlappingComponents);
+	//for (UPrimitiveComponent* OverlappingComponent : OverlappingComponents) {
+	//	GEngine->AddOnScreenDebugMessage(1, 5.f, FColor::Red, "Yo");
+	//}
+	//GEngine->AddOnScreenDebugMessage(1, 5.f, FColor::Red, "End");
+
 }
 
 // Called every frame
