@@ -8,7 +8,7 @@ public class TP1 : ModuleRules
 	{
 		PCHUsage = PCHUsageMode.UseExplicitOrSharedPCHs;
 
-        PublicDependencyModuleNames.AddRange(new string[] { "EnhancedInput", "GameplayTags", "Core", "CoreUObject", "Engine", "InputCore", "HeadMountedDisplay", "NavigationSystem", "AIModule", "Niagara" });
+        PublicDependencyModuleNames.AddRange(new string[] { "Chaos","EnhancedInput", "GameplayTags", "Core", "CoreUObject", "Engine", "InputCore", "HeadMountedDisplay", "NavigationSystem", "AIModule", "Niagara" });
 
 
         PrivateDependencyModuleNames.AddRange(new string[] {  });

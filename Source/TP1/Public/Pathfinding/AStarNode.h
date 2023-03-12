@@ -31,8 +31,23 @@ protected:
 
 	UPROPERTY(BlueprintReadWrite, Category = "Components")
 	UCapsuleComponent* Capsule; 
+
+	float g, h, f;
+
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
+
+
+
+	inline void Setg(float Newg) { g = Newg; };
+
+	inline void Seth(AAStarNode* End) { h = FVector::Distance(GetActorLocation(), End->GetActorLocation()); }; // Euclidean Distance 
+
+	inline void Calcf() { f = g + h; };
+
+	inline float GetF() { return f; };
+	inline float GetG() { return g; };
+	inline float GetH() { return h; };
 
 };

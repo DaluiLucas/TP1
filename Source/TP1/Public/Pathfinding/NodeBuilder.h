@@ -4,6 +4,9 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
+
+#include "Pathfinding/Graph.h"
+
 #include "NodeBuilder.generated.h"
 
 UCLASS()
@@ -19,8 +22,28 @@ protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
+	void MakeGraph();
+
+	float X, Y;
+
+	UPROPERTY(EditAnywhere, Category = "Stats")
+	float DistTrace = 150.f;
+
+	UPROPERTY(EditAnywhere, Category = "Spawn")
+	TSubclassOf<class AAStarNode> Node;
+
+	TArray<AAStarNode*> NodeArray;
+
+	class Graph NodesGraph;
+
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
+
+private:
+
+	UPROPERTY(VisibleAnywhere, Category = "Box")
+	class UBoxComponent* Box; 
+
 
 };

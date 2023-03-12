@@ -3,32 +3,31 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "AStarNode.h"
 /**
  * 
  */
 
 struct Transition {
-	class AStarNode* N1;
-	class AStarNode* N2;
-	int Cost;
-	bool operator==(const Transition T2) { return N1 == T2.N1 && N2 == T2.N2 && Cost == T2.Cost; }
+	class AAStarNode* N1;
+	class AAStarNode* N2;
+	float Cost; //Cost = Distance
+	//inline bool operator==( const Transition& T2) { return (N1->GetActorLocation() == T2.N1->GetActorLocation() && N2->GetActorLocation() == T2.N2->GetActorLocation() && Cost == T2.Cost); }
 };
+
 class TP1_API Graph
 {
 public:
 	Graph();
+	Graph( TArray<class AAStarNode*> Nodes, const UObject* World );
 	~Graph();
 protected: 
-	TArray<class AStarNode *> LesNodes;
+	TArray<class AAStarNode*> LesNodes;
 
-	TArray<Transition> LeGraph;
+
+	const UObject* TheWorld;
 public :
-	//Ajoute une node dans le tablea
-	//True si ajoutée
-	//False si existe deja dans le graph ou pas dans les bounds de la map
-	int AddNode(AStarNode* NewNode);
+	TArray<Transition> LeGraph;
 
-	bool AddTransition(Transition NTrans);
+	TArray<Transition> MakeGraph();
 
 };
