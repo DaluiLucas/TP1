@@ -25,15 +25,7 @@ AAStarNode::AAStarNode()
 void AAStarNode::BeginPlay()
 {
 	Super::BeginPlay();
-	//TArray<UPrimitiveComponent* > OverlappingComponents;
 
-	////UKismetSystemLibrary::ComponentOverlapActors();
-
-	//Capsule->GetOverlappingComponents(OverlappingComponents);
-	//for (UPrimitiveComponent* OverlappingComponent : OverlappingComponents) {
-	//	GEngine->AddOnScreenDebugMessage(1, 5.f, FColor::Red, "Yo");
-	//}
-	//GEngine->AddOnScreenDebugMessage(1, 5.f, FColor::Red, "End");
 
 }
 

@@ -40,6 +40,9 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
+
+	void DrawChemin(TArray<AAStarNode*> Chem); 
+
 private:
 
 	UPROPERTY(VisibleAnywhere, Category = "Box")

@@ -11,7 +11,7 @@ class TP1_API AStarAlgo
 {
 public:
 	AStarAlgo()=delete; // ?
-	AStarAlgo(TArray<struct Transition > Transitions, class AAStarNode* Start, class AAStarNode* End) : Transitions(Transitions) , Start(Start), End(End) {};
+	AStarAlgo(TArray<struct Transition > XTransitions, class AAStarNode* XStart, class AAStarNode* XEnd);
 
 	~AStarAlgo();
 
@@ -22,14 +22,21 @@ public:
 	/// f(s) : g(s)+h(s)
 	///
 protected:
-	TArray<struct Transition> Transitions;
+
 	class AAStarNode* Start;
 	class AAStarNode* End;
 
 public:
+
+	TArray<struct Transition> Transitions;
+
 	TArray<class AAStarNode*> AStar(); 
 
 	AAStarNode* FindSmallestF(TArray< class AAStarNode*> Open);
 
 	TArray<struct Chaos::Pair<AAStarNode*, float>> FindQSuccessors(AAStarNode* Q);
+
+	TArray<AAStarNode*> NodeRoad(AAStarNode* Node);
+
+	inline int Test() { return Transitions.Num(); }
 };

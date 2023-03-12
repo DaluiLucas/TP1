@@ -34,6 +34,8 @@ protected:
 
 	float g, h, f;
 
+
+
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
@@ -49,5 +51,7 @@ public:
 	inline float GetF() { return f; };
 	inline float GetG() { return g; };
 	inline float GetH() { return h; };
+
+	AAStarNode* Parent = nullptr;
 
 };

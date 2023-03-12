@@ -3,9 +3,9 @@
 
 #include "Pathfinding/NodeBuilder.h"
 #include "Components/BoxComponent.h"
+#include "Pathfinding/AStarAlgo.h"
 #include "Pathfinding/AStarNode.h"
 #include "Kismet/KismetSystemLibrary.h"
-
 
 
 // Sets default values
@@ -28,9 +28,9 @@ void ANodeBuilder::BeginPlay()
 	float TempX = X * -1;
 	float TempY;
 
-	while (TempX < X) {
+	while (TempX < X+DistTrace) {
 		TempY = Y * -1;
-		while (TempY < Y) {
+		while (TempY < Y+ DistTrace) {
 
 			FVector Start = FVector(TempX+ Box->GetRelativeLocation().X, TempY+ Box->GetRelativeLocation().Y, Extent.Z+Box->GetRelativeLocation().Z);
 			FVector End = FVector(TempX + Box->GetRelativeLocation().X,TempY + Box->GetRelativeLocation().Y, -50.f);
@@ -51,6 +51,7 @@ void ANodeBuilder::BeginPlay()
 		TempX += DistTrace;
 	}
 
+
 	GEngine->AddOnScreenDebugMessage(1, 5.f, FColor::Red, FString::Printf(TEXT("%d"), NodeArray.Num()));
 	MakeGraph();
 }
@@ -59,9 +60,25 @@ void ANodeBuilder::MakeGraph()
 {
 	NodesGraph = Graph(NodeArray, GetWorld());
 	NodesGraph.MakeGraph();
-	GEngine->AddOnScreenDebugMessage(2, 5.f, FColor::Blue, FString::Printf(TEXT("%d"), NodesGraph.LeGraph.Num()));
+	AStarAlgo Algo = AStarAlgo(NodesGraph.LeGraph, NodeArray[12], NodeArray[NodeArray.Num()-8]);
+	TArray<AAStarNode*> ResChemin = Algo.AStar();
+	GEngine->AddOnScreenDebugMessage(3, 5.f, FColor::Black, FString::Printf(TEXT("%d"), ResChemin.Num()));
+	DrawChemin(ResChemin);
+}
+
+void ANodeBuilder::DrawChemin(TArray<AAStarNode*> Chem) {
+	if (Chem.Num() < 2) return; 
+	for (int i = 0; i < Chem.Num() - 1; i++) {
+		FVector Start = Chem[i]->GetActorLocation();
+		FVector End = Chem[i+1]->GetActorLocation();
+		TArray<AActor*> Ignore;
+		FHitResult HitRes;
+		bool Hit = UKismetSystemLibrary::LineTraceSingle(GetWorld(), Start, End, ETraceTypeQuery::TraceTypeQuery1, false, Ignore, EDrawDebugTrace::Persistent, HitRes, true,FLinearColor::Blue);
+	}
 
 }
+
+
 
 // Called every frame
 void ANodeBuilder::Tick(float DeltaTime)
