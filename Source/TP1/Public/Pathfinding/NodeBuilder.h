@@ -32,7 +32,7 @@ protected:
 	UPROPERTY(EditAnywhere, Category = "Spawn")
 	TSubclassOf<class AAStarNode> Node;
 
-	TArray<AAStarNode*> NodeArray;
+	TArray<class AAStarNode*> NodeArray;
 
 	class Graph NodesGraph;
 
@@ -41,7 +41,11 @@ public:
 	virtual void Tick(float DeltaTime) override;
 
 
-	void DrawChemin(TArray<AAStarNode*> Chem); 
+	void DrawChemin(TArray<class AAStarNode*> Chem); 
+
+	inline TArray<class AAStarNode*> getNodeArray() { return NodeArray; }
+
+	TArray<AAStarNode*> RunAStar(AAStarNode* Start, AAStarNode* End);
 
 private:
 

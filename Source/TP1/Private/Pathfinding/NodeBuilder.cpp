@@ -60,11 +60,16 @@ void ANodeBuilder::MakeGraph()
 {
 	NodesGraph = Graph(NodeArray, GetWorld());
 	NodesGraph.MakeGraph();
-	AStarAlgo Algo = AStarAlgo(NodesGraph.LeGraph, NodeArray[12], NodeArray[NodeArray.Num()-8]);
-	TArray<AAStarNode*> ResChemin = Algo.AStar();
-	GEngine->AddOnScreenDebugMessage(3, 5.f, FColor::Black, FString::Printf(TEXT("%d"), ResChemin.Num()));
-	DrawChemin(ResChemin);
 }
+
+TArray<AAStarNode*> ANodeBuilder::RunAStar(AAStarNode* Start, AAStarNode* End) {
+
+	AStarAlgo Algo = AStarAlgo(NodesGraph.LeGraph, Start, End);
+	TArray<AAStarNode*> ResChemin = Algo.AStar();
+	DrawChemin(ResChemin);
+	return ResChemin;
+}
+
 
 void ANodeBuilder::DrawChemin(TArray<AAStarNode*> Chem) {
 	if (Chem.Num() < 2) return; 

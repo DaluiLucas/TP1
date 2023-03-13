@@ -39,9 +39,36 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category=Input, meta=(AllowPrivateAccess = "true"))
 	class UInputAction* SetDestinationTouchAction;
 
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
+	class UInputAction* DeleteTarget;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
+	class UInputAction* FollowPAth;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
+	class UInputAction* LoopPath;
+
 protected:
 	/** True if the controlled character should navigate to the mouse cursor. */
 	uint32 bMoveToMouseCursor : 1;
+
+	///						Mine
+
+	UPROPERTY(EditAnywhere, Category = "TargetClass")
+	TSubclassOf<class ATargetPoint> TargetClass;
+
+	//Array of targets Points (BP avec visuel)
+	UPROPERTY(EditInstanceOnly, Category = "Targets")
+	TArray<class AActor*> PathArray;
+
+
+	class ANodeBuilder* MyNodeBuilder;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Behavior)
+	TArray<class AAStarNode* > TheWay; 
+
+
+	///					 Mine 
 
 	virtual void SetupInputComponent() override;
 	
@@ -54,6 +81,9 @@ protected:
 	void OnSetDestinationReleased();
 	void OnTouchTriggered();
 	void OnTouchReleased();
+	void DeleteTargetFromArray();
+	void FollowPathFunction();
+	void LoopPathFunction();
 
 private:
 	FVector CachedDestination;
