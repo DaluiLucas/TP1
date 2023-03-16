@@ -73,6 +73,9 @@ protected:
 	UPROPERTY(EditAnywhere, Category = "Stats")
 	float Thresh = 50.f;
 
+	bool CanMove = false;
+
+
 	bool Loop= false;
 	///					 Mine 
 

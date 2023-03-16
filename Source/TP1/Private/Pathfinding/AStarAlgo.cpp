@@ -67,9 +67,17 @@ TArray<class AAStarNode*> AStarAlgo::AStar()
 
 				//iii) if a node with the same position as successor is in the OPEN list which has a lower f than successor, skip this successor
 				//iV) if a node with the same position as  successor  is in the CLOSED list which has a lower f than successor, skip this successor
-				if (  (IndexOpen != INDEX_NONE && TempF > Open[IndexOpen]->GetF() ) ||  (IndexClose != INDEX_NONE && TempF > Close[IndexClose]->GetF())) {
+				if (  (IndexOpen != INDEX_NONE && TempF >= Open[IndexOpen]->GetF() ) ||  (IndexClose != INDEX_NONE && TempF >= Close[IndexClose]->GetF())) {
 
 					continue;
+				}
+
+				//Si present dans Open avec plus petit, a remplacer  
+				if (IndexOpen != INDEX_NONE && TempF < Open[IndexOpen]->GetF()) {
+					Open[IndexOpen]->Setg(Q->GetG() + Succ.Second);
+					Open[IndexOpen]->Seth(End);
+					Open[IndexOpen]->Calcf();
+					Open[IndexOpen]->Parent = Q;
 				}
 
 				//V)otherwise ,add  the node to the open list
@@ -115,12 +123,12 @@ TArray<AAStarNode*> AStarAlgo::NodeRoad(AAStarNode* Node)
 	AAStarNode* Curr = Node;
 
 	while (Curr->Parent != nullptr) {
-		Chemin.Push(Curr);
+		Chemin.Add(Curr);
 		if (Curr->Parent != Curr) {
 			Curr = Curr->Parent;
 		}
 		else return Chemin;
 	}
-	Chemin.Add(Curr);
+	//Chemin.Add(Curr);
 	return Chemin;
 }

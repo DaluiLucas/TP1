@@ -48,9 +48,12 @@ void ATP_TopDownPlayerController::BeginPlay()
 void ATP_TopDownPlayerController::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-	if (TheWay.Num() > 1 && FVector::Distance(GetPawn()->GetTargetLocation(), TheWay[0]->GetActorLocation()) < Thresh) {
-		TheWay.RemoveSingleSwap(TheWay[0]);
+	if (CanMove && TheWay.Num() > 1 && FVector::Distance(GetPawn()->GetTargetLocation(), TheWay[0]->GetActorLocation()) < Thresh) {
+		TheWay.RemoveAt(0);
 		if(TheWay.Num()>0) UAIBlueprintHelperLibrary::SimpleMoveToLocation(this, TheWay[0]->GetActorLocation());
+		else {
+			CanMove = false;
+		}
 	}
 
 }
@@ -105,7 +108,8 @@ void ATP_TopDownPlayerController::FollowPathFunction() {
 
 		FVector StartVector, TargetVector;
 
-		for (int i = 0; i < PathArray.Num(); ++i) {
+		for (int i = 0; i < PathArray.Num(); ++i) 
+		{
 			GEngine->AddOnScreenDebugMessage(-1, 25.f, FColor::Red, FString::Printf(TEXT(" %d"), i));
 
 			if (i != 0) { ClosestToStart = ClosestToEnd; }
@@ -123,11 +127,10 @@ void ATP_TopDownPlayerController::FollowPathFunction() {
 
 			TArray<AAStarNode*>NewNodesToAdd = MyNodeBuilder->RunAStar(ClosestToStart, ClosestToEnd);
 			Algo::Reverse(NewNodesToAdd);
-
-			TheWay.Reserve(TheWay.Num() + NewNodesToAdd.Num());
 			TheWay.Append(NewNodesToAdd);
 
 		}
+		CanMove = true;
 		if(TheWay.Num()>0) UAIBlueprintHelperLibrary::SimpleMoveToLocation(this, TheWay[0]->GetActorLocation());
 
 
@@ -169,16 +172,6 @@ void ATP_TopDownPlayerController::OnSetDestinationTriggered()
 	{
 		CachedDestination = Hit.Location;
 	}
-	
-	//// Move towards mouse pointer or touch
-	//APawn* ControlledPawn = GetPawn();
-	//if (ControlledPawn != nullptr)
-	//{
-	//	FVector WorldDirection = (CachedDestination - ControlledPawn->GetActorLocation()).GetSafeNormal();
-	//	ControlledPawn->AddMovementInput(WorldDirection, 1.0, false);
-	//}
-
-	//Delete ?
 
 }
 
@@ -187,9 +180,6 @@ void ATP_TopDownPlayerController::OnSetDestinationReleased()
 	// If it was a short press
 	if (FollowTime <= ShortPressThreshold)
 	{
-		//// We move there and spawn some particles
-		//UAIBlueprintHelperLibrary::SimpleMoveToLocation(this, CachedDestination);
-
 		UWorld* World = GetWorld();
 		if (World != nullptr && TargetClass != nullptr) {
 			FTransform SpawnTransform = FTransform();
