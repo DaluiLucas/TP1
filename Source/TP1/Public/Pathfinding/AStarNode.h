@@ -45,7 +45,7 @@ public:
 	inline void Setg(float Newg) { g = Newg; };
 
 	inline void Seth(AAStarNode* End) { h = FVector::Distance(GetActorLocation(), End->GetActorLocation()); }; // Euclidean Distance 
-
+	inline void Reseth() { h = 0; }
 	inline void Calcf() { f = g + h; };
 
 	inline float GetF() { return f; };

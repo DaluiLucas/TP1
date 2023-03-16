@@ -74,7 +74,7 @@ void ANodeBuilder::ResetNodes() {
 	for (AAStarNode* Nd : NodeArray) {
 		Nd->Parent = nullptr;
 		Nd->Setg(0.f);
-		Nd->Seth(Nd);
+		Nd->Reseth();
 		Nd->Calcf();
 	}
 }

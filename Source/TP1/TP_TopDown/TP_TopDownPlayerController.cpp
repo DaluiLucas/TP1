@@ -49,10 +49,14 @@ void ATP_TopDownPlayerController::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 	if (CanMove && TheWay.Num() > 1 && FVector::Distance(GetPawn()->GetTargetLocation(), TheWay[0]->GetActorLocation()) < Thresh) {
+		if (Loop) {
+			AAStarNode* N = TheWay[0];
+			TheWay.Add(N);
+		}
 		TheWay.RemoveAt(0);
 		if(TheWay.Num()>0) UAIBlueprintHelperLibrary::SimpleMoveToLocation(this, TheWay[0]->GetActorLocation());
 		else {
-			CanMove = false;
+			if (!Loop)CanMove = false;
 		}
 	}
 
@@ -95,24 +99,23 @@ void ATP_TopDownPlayerController::DeleteTargetFromArray() {
 }
 
 void ATP_TopDownPlayerController::FollowPathFunction() {
-	GEngine->AddOnScreenDebugMessage(25, 2.f, FColor::Red, FString::Printf(TEXT("Path ARray Num ; %d"), PathArray.Num()));
 	if (MyNodeBuilder == nullptr) return;
 
 	if (PathArray.Num() > 0) {
-
 		Loop = false;
 		TArray<AAStarNode*> NodeArray = MyNodeBuilder->getNodeArray();
-		AAStarNode* ClosestToStart = NodeArray[0], *ClosestToEnd = NodeArray[0];
-		float DistStart = FVector::Distance(GetPawn()->GetTargetLocation(), NodeArray[0]->GetTargetLocation());
-		float DistEnd= FVector::Distance(GetPawn()->GetTargetLocation(), NodeArray[0]->GetTargetLocation());
-
-		FVector StartVector, TargetVector;
+		AAStarNode* ClosestToStart, * ClosestToEnd=NodeArray[0];
 
 		for (int i = 0; i < PathArray.Num(); ++i) 
 		{
-			GEngine->AddOnScreenDebugMessage(-1, 25.f, FColor::Red, FString::Printf(TEXT(" %d"), i));
+			
+			float DistStart = FVector::Distance(GetPawn()->GetTargetLocation(), NodeArray[i]->GetTargetLocation());
+			float DistEnd = FVector::Distance(GetPawn()->GetTargetLocation(), NodeArray[i]->GetTargetLocation());
 
 			if (i != 0) { ClosestToStart = ClosestToEnd; }
+			else ClosestToStart = NodeArray[i];
+			
+			ClosestToEnd = NodeArray[i];
 
 			for (AAStarNode* Node : NodeArray) {
 				if (i == 0 && FVector::Distance(GetPawn()->GetTargetLocation(), Node->GetTargetLocation()) < DistStart && Node->OnOff) {
@@ -126,6 +129,7 @@ void ATP_TopDownPlayerController::FollowPathFunction() {
 			}
 
 			TArray<AAStarNode*>NewNodesToAdd = MyNodeBuilder->RunAStar(ClosestToStart, ClosestToEnd);
+			GEngine->AddOnScreenDebugMessage(-1, 25.f, FColor::Red, FString::Printf(TEXT(" %d"), NewNodesToAdd.Num()));
 			Algo::Reverse(NewNodesToAdd);
 			TheWay.Append(NewNodesToAdd);
 
