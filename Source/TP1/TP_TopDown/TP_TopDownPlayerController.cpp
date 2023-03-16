@@ -7,6 +7,7 @@
 #include "Pathfinding/NodeBuilder.h"
 #include "Pathfinding/AStarNode.h"
 #include "BehaviorTree/BehaviorTree.h"
+#include "Algo/Reverse.h"
 
 #include "NiagaraSystem.h"
 #include "NiagaraFunctionLibrary.h"
@@ -19,6 +20,10 @@
 
 ATP_TopDownPlayerController::ATP_TopDownPlayerController()
 {
+
+	// Set this pawn to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
+	PrimaryActorTick.bCanEverTick = true;
+
 	bShowMouseCursor = true;
 	DefaultMouseCursor = EMouseCursor::Default;
 	CachedDestination = FVector::ZeroVector;
@@ -38,6 +43,16 @@ void ATP_TopDownPlayerController::BeginPlay()
 	{
 		Subsystem->AddMappingContext(DefaultMappingContext, 0);
 	}
+}
+
+void ATP_TopDownPlayerController::Tick(float DeltaTime)
+{
+	Super::Tick(DeltaTime);
+	if (TheWay.Num() > 1 && FVector::Distance(GetPawn()->GetTargetLocation(), TheWay[0]->GetActorLocation()) < Thresh) {
+		TheWay.RemoveSingleSwap(TheWay[0]);
+		if(TheWay.Num()>0) UAIBlueprintHelperLibrary::SimpleMoveToLocation(this, TheWay[0]->GetActorLocation());
+	}
+
 }
 
 void ATP_TopDownPlayerController::SetupInputComponent()
@@ -77,29 +92,43 @@ void ATP_TopDownPlayerController::DeleteTargetFromArray() {
 }
 
 void ATP_TopDownPlayerController::FollowPathFunction() {
-	GEngine->AddOnScreenDebugMessage(25, 2.f, FColor::Red, TEXT("Follow"));
+	GEngine->AddOnScreenDebugMessage(25, 2.f, FColor::Red, FString::Printf(TEXT("Path ARray Num ; %d"), PathArray.Num()));
+	if (MyNodeBuilder == nullptr) return;
+
 	if (PathArray.Num() > 0) {
 
-		//PAS BIEN DU TOUT 
+		Loop = false;
 		TArray<AAStarNode*> NodeArray = MyNodeBuilder->getNodeArray();
-		AAStarNode* ClosestToChar = NodeArray[0], *ClosestToTarget = NodeArray[0];
-		float DistChar = FVector::Distance(GetPawn()->GetTargetLocation(), NodeArray[0]->GetTargetLocation());
-		float DistTarget= FVector::Distance(GetPawn()->GetTargetLocation(), NodeArray[0]->GetTargetLocation());
-		for (AAStarNode* Node : NodeArray) {
-			if (FVector::Distance(GetPawn()->GetTargetLocation(), Node->GetTargetLocation()) < DistChar) { 
-				ClosestToChar = Node;
-				DistChar = FVector::Distance(GetPawn()->GetTargetLocation(), Node->GetTargetLocation());
+		AAStarNode* ClosestToStart = NodeArray[0], *ClosestToEnd = NodeArray[0];
+		float DistStart = FVector::Distance(GetPawn()->GetTargetLocation(), NodeArray[0]->GetTargetLocation());
+		float DistEnd= FVector::Distance(GetPawn()->GetTargetLocation(), NodeArray[0]->GetTargetLocation());
+
+		FVector StartVector, TargetVector;
+
+		for (int i = 0; i < PathArray.Num(); ++i) {
+			GEngine->AddOnScreenDebugMessage(-1, 25.f, FColor::Red, FString::Printf(TEXT(" %d"), i));
+
+			if (i != 0) { ClosestToStart = ClosestToEnd; }
+
+			for (AAStarNode* Node : NodeArray) {
+				if (i == 0 && FVector::Distance(GetPawn()->GetTargetLocation(), Node->GetTargetLocation()) < DistStart && Node->OnOff) {
+					ClosestToStart = Node;
+					DistStart = FVector::Distance(GetPawn()->GetTargetLocation(), Node->GetTargetLocation());
+				}
+				if (FVector::Distance(PathArray[i]->GetActorLocation(), Node->GetTargetLocation()) < DistEnd && Node->OnOff) {
+					ClosestToEnd = Node;
+					DistEnd = FVector::Distance(PathArray[i]->GetActorLocation(), Node->GetTargetLocation());
+				}
 			}
-			if (FVector::Distance(PathArray[0]->GetActorLocation(), Node->GetTargetLocation()) < DistTarget) {
-				ClosestToTarget = Node;
-				DistTarget = FVector::Distance(PathArray[0]->GetActorLocation(), Node->GetTargetLocation());
-			}
+
+			TArray<AAStarNode*>NewNodesToAdd = MyNodeBuilder->RunAStar(ClosestToStart, ClosestToEnd);
+			Algo::Reverse(NewNodesToAdd);
+
+			TheWay.Reserve(TheWay.Num() + NewNodesToAdd.Num());
+			TheWay.Append(NewNodesToAdd);
+
 		}
-
-
-		TheWay = MyNodeBuilder->RunAStar(ClosestToChar, ClosestToTarget);
-		
-		UAIBlueprintHelperLibrary::SimpleMoveToLocation(this, CachedDestination);
+		if(TheWay.Num()>0) UAIBlueprintHelperLibrary::SimpleMoveToLocation(this, TheWay[0]->GetActorLocation());
 
 
 	}
@@ -107,7 +136,8 @@ void ATP_TopDownPlayerController::FollowPathFunction() {
 
 void ATP_TopDownPlayerController::LoopPathFunction() {
 	GEngine->AddOnScreenDebugMessage(25, 2.f, FColor::Red, TEXT("Loop"));
-
+	FollowPathFunction();
+	Loop = true;
 }
 
 

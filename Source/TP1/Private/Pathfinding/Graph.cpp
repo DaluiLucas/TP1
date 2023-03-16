@@ -33,7 +33,7 @@ TArray<Transition> Graph::MakeGraph()
 			TArray<AActor*> Ignore; 
 			FHitResult HitRes; 
 			bool Hit = UKismetSystemLibrary::LineTraceSingle(TheWorld, Start, End, ETraceTypeQuery::TraceTypeQuery1, false, Ignore, EDrawDebugTrace::None, HitRes, true);
-			if(!Hit) UKismetSystemLibrary::LineTraceSingle(TheWorld, Start, End, ETraceTypeQuery::TraceTypeQuery1, false, Ignore, EDrawDebugTrace::None, HitRes, true);
+			if(!Hit) UKismetSystemLibrary::LineTraceSingle(TheWorld, Start, End, ETraceTypeQuery::TraceTypeQuery1, false, Ignore, EDrawDebugTrace::ForDuration, HitRes, true);
 			if (!Hit) {
 				Transition Temp;
 				Temp.N1 = Node;

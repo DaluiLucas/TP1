@@ -40,12 +40,13 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
-
 	void DrawChemin(TArray<class AAStarNode*> Chem); 
 
 	inline TArray<class AAStarNode*> getNodeArray() { return NodeArray; }
 
 	TArray<AAStarNode*> RunAStar(AAStarNode* Start, AAStarNode* End);
+
+	void ResetNodes();
 
 private:
 

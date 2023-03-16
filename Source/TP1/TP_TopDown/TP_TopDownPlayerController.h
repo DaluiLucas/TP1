@@ -48,6 +48,7 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 	class UInputAction* LoopPath;
 
+
 protected:
 	/** True if the controlled character should navigate to the mouse cursor. */
 	uint32 bMoveToMouseCursor : 1;
@@ -57,17 +58,22 @@ protected:
 	UPROPERTY(EditAnywhere, Category = "TargetClass")
 	TSubclassOf<class ATargetPoint> TargetClass;
 
-	//Array of targets Points (BP avec visuel)
-	UPROPERTY(EditInstanceOnly, Category = "Targets")
-	TArray<class AActor*> PathArray;
 
+	//Array of targets Points (BP avec visuel)
+	UPROPERTY(EditInstanceOnly, BlueprintReadWrite, Category = "Targets")
+	TArray<class AActor*> PathArray;
 
 	class ANodeBuilder* MyNodeBuilder;
 
+
+	// Point to follow to reach PathArray[0]
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Behavior)
 	TArray<class AAStarNode* > TheWay; 
 
+	UPROPERTY(EditAnywhere, Category = "Stats")
+	float Thresh = 50.f;
 
+	bool Loop= false;
 	///					 Mine 
 
 	virtual void SetupInputComponent() override;
@@ -75,13 +81,20 @@ protected:
 	// To add mapping context
 	virtual void BeginPlay();
 
+	// Called every frame
+	virtual void Tick(float DeltaTime) override;
+
+
 	/** Input handlers for SetDestination action. */
 	void OnInputStarted();
 	void OnSetDestinationTriggered();
 	void OnSetDestinationReleased();
 	void OnTouchTriggered();
 	void OnTouchReleased();
+
+	UFUNCTION(BlueprintCallable)
 	void DeleteTargetFromArray();
+
 	void FollowPathFunction();
 	void LoopPathFunction();
 

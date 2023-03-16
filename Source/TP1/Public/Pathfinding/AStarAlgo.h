@@ -7,6 +7,13 @@
 /**
  * 
  */
+
+struct MyNode {
+	class AAStarNode* N1;
+	float f, g, h;
+	class AAStarNode* Parent;
+};
+
 class TP1_API AStarAlgo
 {
 public:
@@ -21,22 +28,26 @@ public:
 	/// g(s) : le cout du movement entre s et le starting point en passant par le chemin actuel, donc pour s' g(s') = g(s)+Transition(s,s').Cout
 	/// f(s) : g(s)+h(s)
 	///
-protected:
+
+public:
 
 	class AAStarNode* Start;
 	class AAStarNode* End;
 
-public:
-
 	TArray<struct Transition> Transitions;
 
+	// A* Search Algorithm
 	TArray<class AAStarNode*> AStar(); 
 
+	//Find Smallest F Value from given array
 	AAStarNode* FindSmallestF(TArray< class AAStarNode*> Open);
 
+	// Find all successors of Q in Transition
 	TArray<struct Chaos::Pair<AAStarNode*, float>> FindQSuccessors(AAStarNode* Q);
 
+	//Return All Node to go from Start to End
 	TArray<AAStarNode*> NodeRoad(AAStarNode* Node);
+
 
 	inline int Test() { return Transitions.Num(); }
 };

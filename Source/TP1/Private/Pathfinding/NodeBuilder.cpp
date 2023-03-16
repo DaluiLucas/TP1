@@ -63,13 +63,21 @@ void ANodeBuilder::MakeGraph()
 }
 
 TArray<AAStarNode*> ANodeBuilder::RunAStar(AAStarNode* Start, AAStarNode* End) {
-
+	ResetNodes();
 	AStarAlgo Algo = AStarAlgo(NodesGraph.LeGraph, Start, End);
 	TArray<AAStarNode*> ResChemin = Algo.AStar();
 	DrawChemin(ResChemin);
 	return ResChemin;
 }
 
+void ANodeBuilder::ResetNodes() {
+	for (AAStarNode* Nd : NodeArray) {
+		Nd->Parent = nullptr;
+		Nd->Setg(0.f);
+		Nd->Seth(Nd);
+		Nd->Calcf();
+	}
+}
 
 void ANodeBuilder::DrawChemin(TArray<AAStarNode*> Chem) {
 	if (Chem.Num() < 2) return; 
