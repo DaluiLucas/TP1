@@ -51,8 +51,6 @@ void ANodeBuilder::BeginPlay()
 		TempX += DistTrace;
 	}
 
-
-	GEngine->AddOnScreenDebugMessage(1, 5.f, FColor::Red, FString::Printf(TEXT("%d"), NodeArray.Num()));
 	MakeGraph();
 }
 

@@ -100,8 +100,9 @@ void ATP_TopDownPlayerController::DeleteTargetFromArray() {
 
 void ATP_TopDownPlayerController::FollowPathFunction() {
 	GEngine->AddOnScreenDebugMessage(25, 2.f, FColor::Red, TEXT("Follow"));
-	PathCreator();
 	Loop = false;
+	PathCreator();
+
 }
 
 void ATP_TopDownPlayerController::LoopPathFunction() {
@@ -141,7 +142,6 @@ void ATP_TopDownPlayerController::PathCreator() {
 			}
 
 			TArray<AAStarNode*>NewNodesToAdd = MyNodeBuilder->RunAStar(ClosestToStart, ClosestToEnd);
-			GEngine->AddOnScreenDebugMessage(-1, 25.f, FColor::Red, FString::Printf(TEXT(" %d"), NewNodesToAdd.Num()));
 			Algo::Reverse(NewNodesToAdd);
 			TheWay.Append(NewNodesToAdd);
 
