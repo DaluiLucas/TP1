@@ -99,22 +99,34 @@ void ATP_TopDownPlayerController::DeleteTargetFromArray() {
 }
 
 void ATP_TopDownPlayerController::FollowPathFunction() {
+	GEngine->AddOnScreenDebugMessage(25, 2.f, FColor::Red, TEXT("Follow"));
+	PathCreator();
+	Loop = false;
+}
+
+void ATP_TopDownPlayerController::LoopPathFunction() {
+	GEngine->AddOnScreenDebugMessage(25, 2.f, FColor::Red, TEXT("Loop"));
+	Loop = true;
+	PathCreator();
+
+}
+
+void ATP_TopDownPlayerController::PathCreator() {
 	if (MyNodeBuilder == nullptr) return;
 
 	if (PathArray.Num() > 0) {
-		Loop = false;
 		TArray<AAStarNode*> NodeArray = MyNodeBuilder->getNodeArray();
-		AAStarNode* ClosestToStart, * ClosestToEnd=NodeArray[0];
+		AAStarNode* ClosestToStart, * ClosestToEnd = NodeArray[0];
 
-		for (int i = 0; i < PathArray.Num(); ++i) 
+		for (int i = 0; i < PathArray.Num(); ++i)
 		{
-			
+
 			float DistStart = FVector::Distance(GetPawn()->GetTargetLocation(), NodeArray[i]->GetTargetLocation());
 			float DistEnd = FVector::Distance(GetPawn()->GetTargetLocation(), NodeArray[i]->GetTargetLocation());
 
 			if (i != 0) { ClosestToStart = ClosestToEnd; }
 			else ClosestToStart = NodeArray[i];
-			
+
 			ClosestToEnd = NodeArray[i];
 
 			for (AAStarNode* Node : NodeArray) {
@@ -135,19 +147,14 @@ void ATP_TopDownPlayerController::FollowPathFunction() {
 
 		}
 		CanMove = true;
-		if(TheWay.Num()>0) UAIBlueprintHelperLibrary::SimpleMoveToLocation(this, TheWay[0]->GetActorLocation());
-
-
+		if (Loop) {
+			TArray<AAStarNode*>NewNodesToAdd = MyNodeBuilder->RunAStar(ClosestToEnd, TheWay[0]);
+			Algo::Reverse(NewNodesToAdd);
+			TheWay.Append(NewNodesToAdd);
+		}
+		if (TheWay.Num() > 0) UAIBlueprintHelperLibrary::SimpleMoveToLocation(this, TheWay[0]->GetActorLocation());
 	}
 }
-
-void ATP_TopDownPlayerController::LoopPathFunction() {
-	GEngine->AddOnScreenDebugMessage(25, 2.f, FColor::Red, TEXT("Loop"));
-	FollowPathFunction();
-	Loop = true;
-}
-
-
 void ATP_TopDownPlayerController::OnInputStarted()
 {
 	StopMovement();

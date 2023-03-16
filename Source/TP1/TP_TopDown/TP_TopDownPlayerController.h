@@ -100,6 +100,7 @@ protected:
 
 	void FollowPathFunction();
 	void LoopPathFunction();
+	void PathCreator();
 
 private:
 	FVector CachedDestination;
