@@ -1,12 +1,16 @@
-# TP1
+# TP2
 
-Developed with Unreal Engine 4
+Developed with Unreal Engine 5.1.1
 Lab 01 : REALE Lucas
 
 ### Launch project :
-Download from Git, go in Folder and right click on TP1 (Unreal Engine Project File) and Select Generate Visual Studio Project Files.
+Download from Git,
+ Go in Folder and right click on TP1 (Unreal Engine Project File), if your engine version is different you can right clic on the UProject and switch unreal version to yours, but there is a risk it wont work properly.
+Right clic on the UProject and Select Generate Visual Studio Project Files.
 Then you can start the game by clicking twice on TP1, Rebuild if asked, all project code will be available in TP1.sln
+If the project files do not appear inside Visual, you can go inside Unreal Engine->ContentBrowser->C++ Class-> Double clic on any class and it should open properly inside Visual Studio Code.
 
+TP1: inside Unreal Engine->ContentBrowser->Maps->AllSteeringExempleMap
 ### Project:
 Base Map contains multiple Ai each using different steering method.
 You can create your own by :
@@ -35,4 +39,12 @@ Putting the same Actor twice in the Array will cause unwanted behaviour such as 
 Arrival does not instantly stop when reaching the Target, instead slows down a lot and keep moving/turning really slow for a moment
 Other Array issues.
 
-	
+TP2: inside Unreal Engine->ContentBrowser->Maps->PathfindingMap
+
+Left click on the map = Set a point , you can set multiple points on the map
+E = Follow the path you created 
+A = Loop Around the path you created
+Backspace = delete the last point placed 
+
+###Bugs 
+if you add remove points while the character moves it will most likely have unintended beahviours  
