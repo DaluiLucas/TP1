@@ -10,7 +10,7 @@ Right clic on the UProject and Select Generate Visual Studio Project Files.
 Then you can start the game by clicking twice on TP1, Rebuild if asked, all project code will be available in TP1.sln
 If the project files do not appear inside Visual, you can go inside Unreal Engine->ContentBrowser->C++ Class-> Double clic on any class and it should open properly inside Visual Studio Code.
 
-##TP1: inside Unreal Engine->ContentBrowser->Maps->AllSteeringExempleMap
+## TP1: inside Unreal Engine->ContentBrowser->Maps->AllSteeringExempleMap
 ### Project:
 Base Map contains multiple Ai each using different steering method.
 You can create your own by :
@@ -39,7 +39,7 @@ Putting the same Actor twice in the Array will cause unwanted behaviour such as 
 Arrival does not instantly stop when reaching the Target, instead slows down a lot and keep moving/turning really slow for a moment
 Other Array issues.
 
-##TP2: inside Unreal Engine->ContentBrowser->Maps->PathfindingMap
+## TP2: inside Unreal Engine->ContentBrowser->Maps->PathfindingMap
 
 Left click on the map = Set a point , you can set multiple points on the map
 E = Follow the path you created 
