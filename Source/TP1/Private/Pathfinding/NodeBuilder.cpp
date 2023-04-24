@@ -4,6 +4,7 @@
 #include "Pathfinding/NodeBuilder.h"
 #include "Components/BoxComponent.h"
 #include "Pathfinding/AStarAlgo.h"
+#include "TP1/TP_TopDown/TP_TopDownPlayerController.h"
 #include "Pathfinding/AStarNode.h"
 #include "Kismet/KismetSystemLibrary.h"
 
@@ -78,11 +79,16 @@ void ANodeBuilder::ResetNodes() {
 }
 
 void ANodeBuilder::DrawChemin(TArray<AAStarNode*> Chem) {
-	if (Chem.Num() < 2) return; 
+	
+	TArray<AActor*> Ignore;
+	FHitResult HitRes0;
+	ATP_TopDownPlayerController* Controller = Cast<ATP_TopDownPlayerController>(GetOwner());
+	if(Controller)
+	UKismetSystemLibrary::LineTraceSingle(GetWorld(), Controller->GetPawn()->GetActorLocation(), Chem[0]->GetActorLocation() , ETraceTypeQuery::TraceTypeQuery1, false, Ignore, EDrawDebugTrace::Persistent, HitRes0, true, FLinearColor::Blue);
+	if (Chem.Num() < 1) return;
 	for (int i = 0; i < Chem.Num() - 1; i++) {
 		FVector Start = Chem[i]->GetActorLocation();
 		FVector End = Chem[i+1]->GetActorLocation();
-		TArray<AActor*> Ignore;
 		FHitResult HitRes;
 		bool Hit = UKismetSystemLibrary::LineTraceSingle(GetWorld(), Start, End, ETraceTypeQuery::TraceTypeQuery1, false, Ignore, EDrawDebugTrace::Persistent, HitRes, true,FLinearColor::Blue);
 	}
